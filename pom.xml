@@ -1,0 +1,72 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>net.imagej</groupId>
+		<artifactId>pom-imagej</artifactId>
+		<version>2.9</version>
+		<relativePath />
+	</parent>
+
+  	<artifactId>deconware-algorithms</artifactId>
+  	<packaging>jar</packaging>
+  	<name>deconware-algorithms</name>
+
+ 	<dependencies>
+
+		<dependency>
+			<groupId>net.imglib2</groupId>
+			<artifactId>imglib2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.imglib2</groupId>
+			<artifactId>imglib2-algorithms</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.imglib2</groupId>
+			<artifactId>imglib2-algorithms-gpl</artifactId>
+		</dependency>	
+		<dependency>
+			<groupId>net.imagej</groupId>
+			<artifactId>imagej-ops</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.scif</groupId>
+			<artifactId>scifio</artifactId>
+		</dependency>
+	 <!--  	<dependency>
+  			<groupId>org.uncommons.maths</groupId>
+  			<artifactId>uncommons-maths</artifactId>
+  			<version>1.2.2a</version>
+  		</dependency> -->
+		<dependency>
+			<groupId>net.sf.jafama</groupId>
+			<artifactId>JaFaMa</artifactId>
+			<version>1.2</version>
+		</dependency>
+		
+		<!-- Testing scope -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+	
+ 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>imagej.public</id>
+			<url>http://maven.imagej.net/content/groups/public</url>
+		</repository>
+		<repository>
+			<id>in-project</id>
+			<name>In project repo</name>
+			<url>file://lib</url>
+			</repository>
+	</repositories>
+ 
+</project>
