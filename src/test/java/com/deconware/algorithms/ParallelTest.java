@@ -17,7 +17,6 @@ import com.deconware.algorithms.parallel.arithmetic.ParallelDivide;
 
 public class ParallelTest 
 {
-	private int seed;
 	double eps=0.00001;
 
 	@Test

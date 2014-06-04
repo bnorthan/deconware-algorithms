@@ -41,11 +41,19 @@
   			<artifactId>uncommons-maths</artifactId>
   			<version>1.2.2a</version>
   		</dependency> -->
+  		<dependency>
+			<groupId>com.deconware.wrappers</groupId>
+			<artifactId>YacuDecuJavaWrapper</artifactId>
+			<version>1.0</version>
+			 <type>jar</type>
+		</dependency> 
 		<dependency>
 			<groupId>net.sf.jafama</groupId>
 			<artifactId>JaFaMa</artifactId>
 			<version>1.2</version>
+			 <type>jar</type>
 		</dependency>
+	
 		
 		<!-- Testing scope -->
 		<dependency>
@@ -65,7 +73,7 @@
 		<repository>
 			<id>in-project</id>
 			<name>In project repo</name>
-			<url>file://lib</url>
+			<url>file:${project.basedir}/lib</url>
 			</repository>
 	</repositories>
  
