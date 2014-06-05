@@ -131,6 +131,9 @@ public abstract class AbstractFrequencyFilter<T extends RealType<T>, S extends R
 	{
 		double sumbeforenorm=StaticFunctions.sum2(kernel);
 		System.out.println("sumbeforenorm: "+sumbeforenorm);
+		
+		// TODO: remove normalization step.  This should be done at a higher level
+		
 		StaticFunctions.norm(Views.iterable(kernel));
 		double sum=StaticFunctions.sum2(kernel);
 		double sum2=StaticFunctions.sum2(image);

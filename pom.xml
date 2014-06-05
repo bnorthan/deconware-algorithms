@@ -10,9 +10,11 @@
 		<relativePath />
 	</parent>
 
+	<groupId>com.deconware</groupId>
   	<artifactId>deconware-algorithms</artifactId>
   	<packaging>jar</packaging>
   	<name>deconware-algorithms</name>
+  	<version>1.0.0-SNAPSHOT</version>
 
  	<dependencies>
 
@@ -20,39 +22,47 @@
 			<groupId>net.imglib2</groupId>
 			<artifactId>imglib2</artifactId>
 		</dependency>
+		
 		<dependency>
 			<groupId>net.imglib2</groupId>
 			<artifactId>imglib2-algorithms</artifactId>
 		</dependency>
+		
 		<dependency>
 			<groupId>net.imglib2</groupId>
 			<artifactId>imglib2-algorithms-gpl</artifactId>
 		</dependency>	
+		
 		<dependency>
 			<groupId>net.imagej</groupId>
 			<artifactId>imagej-ops</artifactId>
 		</dependency>
+		
 		<dependency>
 			<groupId>io.scif</groupId>
 			<artifactId>scifio</artifactId>
 		</dependency>
+	 
 	 <!--  	<dependency>
   			<groupId>org.uncommons.maths</groupId>
   			<artifactId>uncommons-maths</artifactId>
   			<version>1.2.2a</version>
   		</dependency> -->
+  	
   		<dependency>
 			<groupId>com.deconware.wrappers</groupId>
 			<artifactId>YacuDecuJavaWrapper</artifactId>
 			<version>1.0</version>
 			 <type>jar</type>
 		</dependency> 
+	
 		<dependency>
 			<groupId>com.deconware.wrappers</groupId>
 			<artifactId>CosmPsfJavaWrapper</artifactId>
 			<version>1.0</version>
 			 <type>jar</type>
 		</dependency> 
+	
 		<dependency>
 			<groupId>net.sf.jafama</groupId>
 			<artifactId>JaFaMa</artifactId>

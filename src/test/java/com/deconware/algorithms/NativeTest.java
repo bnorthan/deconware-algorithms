@@ -7,10 +7,13 @@ import com.deconware.algorithms.wrappers.deconvolution.YacuDecuGPUWrapper;
 
 public class NativeTest 
 {
-	@Test
+	@Test  
 	public void testYacuDecu() 
 	{
-		YacuDecuGPUWrapper wrapper=new YacuDecuGPUWrapper();
+		// TODO:
+		// how to handle case where it can't find library????
+		
+		/*YacuDecuGPUWrapper wrapper=new YacuDecuGPUWrapper();
 		
 		// check dependencies
 		boolean dependenciesMet=wrapper.checkDependencies();
@@ -25,7 +28,7 @@ public class NativeTest
 			System.out.println();
 			
 			return;
-		}
+		}*/
 		
 	}
 }
