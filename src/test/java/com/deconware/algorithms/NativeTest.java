@@ -10,7 +10,7 @@ public class NativeTest
 	@Test
 	public void testYacuDecu() 
 	{
-	/*	YacuDecuGPUWrapper wrapper=new YacuDecuGPUWrapper();
+		YacuDecuGPUWrapper wrapper=new YacuDecuGPUWrapper();
 		
 		// check dependencies
 		boolean dependenciesMet=wrapper.checkDependencies();
@@ -25,7 +25,7 @@ public class NativeTest
 			System.out.println();
 			
 			return;
-		}*/
+		}
 		
 	}
 }

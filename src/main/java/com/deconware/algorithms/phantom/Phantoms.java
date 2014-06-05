@@ -30,7 +30,6 @@ public class Phantoms
 		{
 			value.setReal(intensity);
 		}
-		
 	}
 	
 	public static <T extends RealType<T> > void drawAsymetricSphere(final RandomAccessibleInterval<T> randomAccessible,

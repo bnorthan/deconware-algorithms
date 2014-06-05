@@ -13,6 +13,8 @@ import net.imglib2.meta.ImgPlus;
 
 import com.deconware.algorithms.psf.FlipPsfQuadrants;
 
+import com.deconware.wrappers.CosmPsf_swig;
+
 public class PsfGenerator 
 {
 	public static enum PsfType{WIDEFIELD, TWO_PHOTON, CONFOCAL_CIRCULAR, CONFOCAL_LINE};
@@ -95,7 +97,7 @@ public class PsfGenerator
 	// default constructor just loads the COSM wrapper library without setting member variables
 	public PsfGenerator()
 	{
-		LoadLib();		
+		LoadLib();	
 	}
 	
 	// load the COSM wrapper library and set variables 
@@ -134,6 +136,7 @@ public class PsfGenerator
 		// (library should be placed in <ImageJ root>/lib/linux64
 		
 		System.loadLibrary("CosmPsfWrapper");
+		System.loadLibrary("CosmPsfJavaSwig");
 	}
 	
 		
@@ -145,7 +148,7 @@ public class PsfGenerator
 												double designSpecimenLayerRefractiveIndex,
 												double actualImmersionOilRefractiveIndex,
 												double actualSpecimenLayerRefractiveIndex,
-												double actualPointSourceDespthInSpecimenLayer,
+												double actualPointSourceDepthInSpecimenLayer,
 												PsfType psfType ,
 												PsfModel psfModel)
 	{
@@ -160,7 +163,7 @@ public class PsfGenerator
 		long[] lsize={size[0],size[1],size[2]};
 		
 		// generate the psf
-		boolean success = psfGenerator.GeneratePsf(psfBuffer, 
+		/*boolean success = psfGenerator.GeneratePsf(psfBuffer, 
 													lsize, 
 													spacing, 
 													emissionWavelength, 
@@ -171,10 +174,23 @@ public class PsfGenerator
 													actualSpecimenLayerRefractiveIndex, 
 													actualPointSourceDespthInSpecimenLayer,
 													PsfTypeToInt(psfType),
-													PsfModelToInt(psfModel));
+													PsfModelToInt(psfModel));*/
+		
+		long status = CosmPsf_swig.CosmPsf(psfBuffer, 
+				new int[]{(int)lsize[0],(int)lsize[1],(int)lsize[2]}, 
+				spacing, 
+				emissionWavelength, 
+				numericalAperture,
+				designImmersionOilRefractiveIndex, 
+				designSpecimenLayerRefractiveIndex, 
+				actualImmersionOilRefractiveIndex, 
+				actualSpecimenLayerRefractiveIndex, 
+				actualPointSourceDepthInSpecimenLayer,
+				PsfTypeToInt(psfType),
+				PsfModelToInt(psfModel));
 		
 		// if successful
-		if (success)
+		if (true)
 		{
 			return convertBufferToImage(psfBuffer, size);
 		}
@@ -213,7 +229,7 @@ public class PsfGenerator
 		System.out.println("actualPointSourceDepthInSpecimenLayer: "+actualPointSourceDepthInSpecimenLayer);
 		
 		// generate the psf
-		boolean success = GeneratePsf(psfBuffer, 
+	/*	boolean success = GeneratePsf(psfBuffer, 
 				lsymsize, 
 				spacing, 
 				emissionWavelength, 
@@ -224,10 +240,23 @@ public class PsfGenerator
 				ri, 
 				actualPointSourceDepthInSpecimenLayer,
 				0,
-				0);
+				0);*/
+		
+		long status = CosmPsf_swig.CosmPsf(psfBuffer, 
+				symsize, 
+				spacing, 
+				emissionWavelength, 
+				numericalAperture,
+				designImmersionOilRefractiveIndex, 
+				designSpecimenLayerRefractiveIndex, 
+				actualImmersionOilRefractiveIndex, 
+				ri, 
+				actualPointSourceDepthInSpecimenLayer,
+				PsfTypeToInt(psfType),
+				PsfModelToInt(psfModel));
 
 		// if successful
-		if (success)
+		if (true)
 		{		
 			Img<FloatType> psf = convertBufferToImage(psfBuffer, symsize);
 			
