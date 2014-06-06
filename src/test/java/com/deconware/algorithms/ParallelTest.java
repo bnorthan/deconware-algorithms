@@ -12,8 +12,8 @@ import net.imglib2.Cursor;
 import com.deconware.algorithms.StaticFunctions ;
 import com.deconware.algorithms.parallel.ReductionChunker;
 import com.deconware.algorithms.parallel.IterationChunker;
-import com.deconware.algorithms.parallel.arithmetic.ParallelSum;
-import com.deconware.algorithms.parallel.arithmetic.ParallelDivide;
+import com.deconware.algorithms.parallel.math.ParallelDivide;
+import com.deconware.algorithms.parallel.math.ParallelSum;
 
 public class ParallelTest 
 {
@@ -45,8 +45,10 @@ public class ParallelTest
 		
 		long threadTime=System.currentTimeMillis()-start;
 		
+		FloatType threadResult2=ParallelSum.RunParallelSum(in, new FloatType());
+		
 		System.out.println("Non-threaded sum time/result: "+noThreadTime+" / "+noThreadResult);
-		System.out.println("Threaded sum time/result: "+threadTime+" / "+threadResult);
+		System.out.println("Threaded sum time/result: "+threadTime+" / "+threadResult+ " static call"+threadResult2);
 		
 		assertEquals(noThreadResult,threadResult.getRealDouble(), eps);
 		

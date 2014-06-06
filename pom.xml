@@ -62,6 +62,13 @@
 			<version>1.0</version>
 			 <type>jar</type>
 		</dependency> 
+		
+		<dependency>
+			<groupId>com.deconware.wrappers</groupId>
+			<artifactId>DeconwareJavaWrapper</artifactId>
+			<version>1.0</version>
+			 <type>jar</type>
+		</dependency> 
 	
 		<dependency>
 			<groupId>net.sf.jafama</groupId>

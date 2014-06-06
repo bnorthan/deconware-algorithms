@@ -4,7 +4,7 @@ import com.deconware.algorithms.wrappers.NativeWrapper;
 
 public class YacuDecuGPUWrapper implements NativeWrapper
 {
-	public boolean checkDependencies()
+	public boolean loadDependencies()
 	{
 		try
 		{
