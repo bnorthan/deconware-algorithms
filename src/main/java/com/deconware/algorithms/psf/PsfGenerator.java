@@ -59,7 +59,8 @@ public class PsfGenerator
 			return -1;
 		}
 	}
-	public native boolean GeneratePsf(float[] psfBuffer);
+	
+	/*public native boolean GeneratePsf(float[] psfBuffer);
 	
 	public native boolean GeneratePsf(float[] psfBuffer,
 										long[] size,
@@ -72,7 +73,7 @@ public class PsfGenerator
 										double actualSpecimenLayerRefractiveIndex,
 										double actualPointSourceDespthInSpecimenLayer,
 										int type,
-										int model);
+										int model);*/
 										
 	int[] size;
 	int[] symsize;

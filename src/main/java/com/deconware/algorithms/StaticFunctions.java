@@ -30,8 +30,6 @@ import io.scif.img.ImgSaver;
 import java.text.NumberFormat;
 import java.io.*;  
 
-
-
 /*
  * class to be used for quick implementation and prototyping of math and utility functions
  * 
@@ -40,7 +38,7 @@ import java.io.*;
  */
 public class StaticFunctions 
 {
-	
+	      
 	/*
 	 * complex multiply two images
 	 */
@@ -1162,5 +1160,6 @@ public class StaticFunctions
 
 			return ArrayImgs.floats(array, dims);
 		}
+	
 }
 

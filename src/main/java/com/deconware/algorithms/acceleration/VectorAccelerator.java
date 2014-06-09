@@ -20,7 +20,7 @@ public class VectorAccelerator <T extends RealType<T>> implements Accelerator<T>
 	@Override
 	public Img<T> Accelerate(Img<T> yk_iterated)
 	{
-		// use the iterated prediciton and the previous value of the prediciton
+		// use the iterated prediction and the previous value of the predcition
 		// to calculate the acceleration factor
 		if (yk_prediction!=null)
 		{
@@ -82,7 +82,6 @@ public class VectorAccelerator <T extends RealType<T>> implements Accelerator<T>
 			gkm1=gk.copy();
 			
 			return numerator/denominator;
-			
 			
 		}
 		

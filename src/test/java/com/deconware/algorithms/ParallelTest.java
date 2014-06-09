@@ -14,13 +14,14 @@ import com.deconware.algorithms.parallel.ReductionChunker;
 import com.deconware.algorithms.parallel.IterationChunker;
 import com.deconware.algorithms.parallel.math.ParallelDivide;
 import com.deconware.algorithms.parallel.math.ParallelSum;
+import com.deconware.algorithms.parallel.math.ParallelSubtract;
 
 public class ParallelTest 
 {
 	double eps=0.00001;
 
 	@Test
-	public void test() 
+	public void sumTest() 
 	{
 		long xSize=128;
 		long ySize=128;
@@ -55,7 +56,7 @@ public class ParallelTest
 	}
 	
 	@Test
-	public void divisionTest()
+	public void arithmeticTest()
 	{
 		/*Img<FloatType> simpletest = StaticFunctions.generateFloatTestImg(17, true, 4, 4);
 		Img<UnsignedByteType> bytetest = StaticFunctions.generateUnsignedByteTestImg(17, true, 4, 4);
@@ -73,8 +74,8 @@ public class ParallelTest
 		StaticFunctions.Pause();
 		*/
 		
-		long xSize=128;
-		long ySize=128;
+		long xSize=1280;
+		long ySize=1280;
 		long size=xSize*ySize;
 		
 		Img<FloatType> img1 = StaticFunctions.generateFloatTestImg(17, true, xSize, ySize);
@@ -112,7 +113,23 @@ public class ParallelTest
 		
 			assertEquals(c1.get().getRealFloat(), c2.get().getRealFloat(), eps);
 		}
+		
+		// test subtraction
+		
+		start=System.currentTimeMillis();
+		Img<FloatType> subtractionNoThread=StaticFunctions.Subtract(img1, img2);
+		noThreadTime=System.currentTimeMillis()-start;
+		
+		start=System.currentTimeMillis();
+		Img<FloatType> subtractionThread=ParallelSubtract.Subtract(img1, img2);
+		threadTime=System.currentTimeMillis()-start;
+		
+		TestUtilities.AreIntervalsTheSameFloat(subtractionNoThread, subtractionThread, (float)eps);
+		
+		System.out.println("Time for non-threaded subtraction "+noThreadTime);
+		System.out.println("Time for threaded subtraction "+threadTime);
+		
 	}
-	
+
 }
 
