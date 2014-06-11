@@ -8,6 +8,10 @@ public class YacuDecuGPUWrapper implements NativeWrapper
 	{
 		try
 		{
+			String javaLibPath = System.getProperty("java.library.path");
+			
+			System.out.println("path is: "+javaLibPath);
+		      
 			System.loadLibrary("YacuDecu");
 		}
 		catch (Exception ex)

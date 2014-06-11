@@ -117,7 +117,7 @@ public class RichardsonLucyFilter <T extends RealType<T>, S extends RealType<S>>
 		
 		// compute estimate - 
 		// for standard RL this step will multiply output of correlation step and current estimate
-		// (Note: ComputeEstimate can be overriden to achieve regularization)
+		// (Note: ComputeEstimate can be overridden to achieve regularization)
 		ComputeEstimate(correlation);
 		
 		// normalize for non-circulant deconvolution 
@@ -127,6 +127,7 @@ public class RichardsonLucyFilter <T extends RealType<T>, S extends RealType<S>>
 			StaticFunctions.InPlaceDivide2(normalization, estimate);
 		}
 		
+		// TODO: there is an extra create reblurred here!
 		// create reblurred so we can use it to calculate likelihood and so it is ready for next time
 		createReblurred();
 			

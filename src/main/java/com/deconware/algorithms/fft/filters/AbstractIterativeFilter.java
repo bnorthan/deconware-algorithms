@@ -254,6 +254,7 @@ public abstract class AbstractIterativeFilter<T extends RealType<T>, S extends R
 		//	StaticFunctions.showStats(estimate);
 		//	System.out.println();
 			
+			// if an accelerator has been set accelerate the solution
 			if ( (iteration>0)&&(iteration<n-1)&&(accelerator!=null))
 			{
 				long accelerationStartTime=System.currentTimeMillis();
