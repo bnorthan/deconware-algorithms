@@ -22,6 +22,8 @@ import com.deconware.algorithms.acceleration.Accelerator;
 import com.deconware.algorithms.acceleration.VectorAccelerator;
 import com.deconware.algorithms.acceleration.MultiplicativeAccelerator;
 
+import com.deconware.algorithms.fft.SimpleFFTFactory.FFTTarget;
+
 /**
  * Base class for an iterative deconvolution filter
  * 
@@ -367,7 +369,7 @@ public abstract class AbstractIterativeFilter<T extends RealType<T>, S extends R
 		}
 		
 		// get size of fft space- may not be same size as object space due to fft padding
-		fft_n=SimpleFFTFactory.GetPaddedInputSizeLong(n);
+		fft_n=SimpleFFTFactory.GetPaddedInputSizeLong(n, FFTTarget.MINES_SPEED);
 		
 		// create the normalization image
 		final T type = Util.getTypeFromInterval(image);
@@ -449,7 +451,7 @@ public abstract class AbstractIterativeFilter<T extends RealType<T>, S extends R
 		}
 		
 		// get size of fft space- may not be same size as object space due to fft padding
-		fft_n=SimpleFFTFactory.GetPaddedInputSizeLong(n);
+		fft_n=SimpleFFTFactory.GetPaddedInputSizeLong(n, FFTTarget.MINES_SPEED);
 		
 		// create the normalization image
 		final T type = Util.getTypeFromInterval(image);

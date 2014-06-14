@@ -18,6 +18,15 @@ import net.imglib2.type.numeric.RealType;
 public class SimpleFFTFactory<T extends RealType<T>, S extends ComplexType<S>>
 {
 	/**
+	 * Extension is often used in preparation for FFT filtering in which case
+	 * it is desired to extend to the nearest fast size.  The nearest fast size
+	 * can differ depending on the algorithm and hardware used. 
+	 */
+	static public enum FFTTarget
+	{
+		MINES_SPEED, MINES_SIZE, CUFFT, NONE
+	}
+	/**
 	 * 
 	 * creates and returns an appropriate simple fft
 	 * 
@@ -44,10 +53,10 @@ public class SimpleFFTFactory<T extends RealType<T>, S extends ComplexType<S>>
 	 * @param dimensions
 	 * @return
 	 */
-	public static int[] GetPaddedInputSize(long[] dimensions)
+	public static int[] GetPaddedInputSize(long[] dimensions, FFTTarget target)
 	{
 		
-		long[] paddedDimensions = GetPaddedInputSizeLong(dimensions);
+		long[] paddedDimensions = GetPaddedInputSizeLong(dimensions, target);
 		
 		int[] intPaddedDimensions = new int[paddedDimensions.length];
 		
@@ -65,7 +74,7 @@ public class SimpleFFTFactory<T extends RealType<T>, S extends ComplexType<S>>
 	 * @param dimensions
 	 * @return
 	 */
-	public static long[] GetPaddedInputSizeLong(long[] dimensions)
+	public static long[] GetPaddedInputSizeLong(long[] dimensions, FFTTarget target)
 	{
 		
 		long[] paddedDimensions = new long[dimensions.length];
