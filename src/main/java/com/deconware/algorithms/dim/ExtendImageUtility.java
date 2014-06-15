@@ -57,7 +57,6 @@ public class ExtendImageUtility <T extends RealType<T>>
 				{
 					extendAxis=true;
 					newDimensions[d]=oldDimensions[d]+2*extension[a];
-					offset[d]=-extension[a];
 				}
 			}
 			
@@ -65,18 +64,25 @@ public class ExtendImageUtility <T extends RealType<T>>
 			if (extendAxis==false)
 			{
 				newDimensions[d]=interval.dimension(d);
-				offset[d]=0;
 			}
 		}
 		
 		// if the image should be extended further to the nearest FFT size that is optimized for speed
-		if (fftTarget==FFTTarget.MINES_SPEED)
+		if (fftTarget!=null)
 		{
-			System.out.println("fft speed");
+			if (fftTarget!=FFTTarget.NONE)
+			{
+				System.out.println("fft speed");
 						
-			newDimensions=SimpleFFTFactory.GetPaddedInputSizeLong(newDimensions, fftTarget);
+				newDimensions=SimpleFFTFactory.GetPaddedInputSizeLong(newDimensions, fftTarget);
+			}
 		}
-
+		
+		for (int d=0;d<interval.numDimensions();d++)
+		{
+			offset[d]=-(newDimensions[d]-oldDimensions[d])/2;
+		}
+		
 		// create the OutOfBoundsFactory according to the boundary type
 		if (boundaryType==BoundaryType.MIRROR)
 		{

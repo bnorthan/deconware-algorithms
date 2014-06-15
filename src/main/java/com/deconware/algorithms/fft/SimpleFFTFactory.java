@@ -76,11 +76,38 @@ public class SimpleFFTFactory<T extends RealType<T>, S extends ComplexType<S>>
 	 */
 	public static long[] GetPaddedInputSizeLong(long[] dimensions, FFTTarget target)
 	{
-		
 		long[] paddedDimensions = new long[dimensions.length];
 		long[] fftDimensions = new long[dimensions.length];
 		
-		FFTMethods.dimensionsRealToComplexFast( FinalDimensions.wrap(dimensions), paddedDimensions, fftDimensions );
+		// 
+		if (target==FFTTarget.NONE)
+		{
+			paddedDimensions=dimensions;
+		}
+		
+		// for CUFFT use power of 2
+		else if (target==FFTTarget.CUFFT)
+		{
+			for (int d=0;d<dimensions.length;d++)
+			{
+				int i=0;
+				long powerOf2=(int)(java.lang.Math.pow(2, i));
+				
+				while (powerOf2<dimensions[d])
+				{
+					i++;
+					powerOf2=(int)(java.lang.Math.pow(2, i));
+				}
+				
+				paddedDimensions[d]=powerOf2;
+			}
+		}
+		
+		// default to Mines fft dimensions
+		else
+		{
+			FFTMethods.dimensionsRealToComplexFast( FinalDimensions.wrap(dimensions), paddedDimensions, fftDimensions );
+		}
 		
 		return paddedDimensions;
 	}
