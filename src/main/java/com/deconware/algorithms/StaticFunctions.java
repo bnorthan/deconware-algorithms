@@ -241,6 +241,11 @@ public class StaticFunctions
 	{
 		Img<T> cropped = outputFactory.create(size, type);
 		
+		return crop(source, cropped, start, size);
+	}
+	
+	public static <T extends RealType<T>> Img<T> crop(final RandomAccessible<T> source, Img<T> cropped, long[] start, long[] size)
+	{
 		final RandomAccess<T> random = source.randomAccess();
 		
 		final Cursor<T> cursor = cropped.cursor();
@@ -1003,7 +1008,7 @@ public class StaticFunctions
 		{
 			dims[i]=template.dimension(i);
 		}
-		
+		https://github.com/bnorthan/RogueImageJPlugins/blob/master/SimpleSimpleITKDecon/src/main/java/com/truenorth/itk/commands/RichardsonLucyITKCommandSimple.java
 		return factory.create(dims, t);
 	}
 	/*
@@ -1034,7 +1039,7 @@ public class StaticFunctions
 		long freeMemory = runtime.freeMemory();
 		
 		System.out.println("free memory: "+format.format(freeMemory/1024));
-		System.out.println("allocated memory: " + format.format(allocatedMemory / 1024));
+		System.out.println("allocated memory: " + format.format(allocatedMemory / 1024));https://github.com/bnorthan/RogueImageJPlugins/blob/master/SimpleSimpleITKDecon/src/main/java/com/truenorth/itk/commands/RichardsonLucyITKCommandSimple.java
 		System.out.println("max memory: " + format.format(maxMemory / 1024));
 		System.out.println("total free memory: "+format.format((freeMemory+(maxMemory-allocatedMemory))/1024));	
 	}

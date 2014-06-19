@@ -13,10 +13,11 @@ import net.imglib2.type.numeric.RealType;
  *
  * @param <T>
  */
-public abstract class InputOutputAlgorithm<T extends RealType<T>> extends MultiThreadedBenchmarkAlgorithm implements OutputAlgorithm<Img<T>>
+public abstract class InputOutputAlgorithm<T extends RealType<T>, S> extends MultiThreadedBenchmarkAlgorithm implements OutputAlgorithm<S>
 {
 	protected RandomAccessibleInterval<T> input;
-	protected Img<T> output;
+	protected S output;
+	//protected Img<T> output;
 	
 	String errorMessage="";
 	int numThreads;
@@ -49,7 +50,7 @@ public abstract class InputOutputAlgorithm<T extends RealType<T>> extends MultiT
 	}	
 	
 	@Override
-	public Img<T> getResult()   
+	public S getResult()   
 	{ 
 		return output; 
 	}

@@ -3,10 +3,12 @@ package com.deconware.algorithms.psf;
 import com.deconware.algorithms.StaticFunctions;
 
 import net.imglib2.img.Img;
+import net.imglib2.IterableInterval;
 import net.imglib2.img.ImgFactory;
 import net.imglib2.img.planar.PlanarImgFactory;
 import net.imglib2.Cursor;
 
+import net.imglib2.img.basictypeaccess.array.FloatArray;
 import net.imglib2.type.numeric.real.FloatType;
 
 import net.imglib2.meta.ImgPlus;
@@ -105,7 +107,7 @@ public class PsfGenerator
 	 * @param designImmersionOilRefractiveIndex
 	 * @param designSpecimenLayerRefractiveIndex
 	 * @param actualImmersionOilRefractiveIndex
-	 * @param actualSpecimenLayerRefractiveIndex
+	 * @param actualSpecimimport net.imglib2.img.basictypeaccess.array.ByteArray;enLayerRefractiveIndex
 	 * @param actualPointSourceDepthInSpecimenLayer
 	 * @param psfType
 	 * @param psfModel
@@ -166,7 +168,7 @@ public class PsfGenerator
 	 * @param actualPointSourceDepthInSpecimenLayer
 	 * @param psfType
 	 * @param psfModel
-	 * @return
+	 * @returnimport net.imglib2.img.basictypeaccess.array.ByteArray;
 	 */
 	public static Img<FloatType> CallGeneratePsf(int[] size,
 												float[] spacing,
@@ -202,7 +204,7 @@ public class PsfGenerator
 				actualSpecimenLayerRefractiveIndex, 
 				actualPointSourceDepthInSpecimenLayer,
 				PsfTypeToInt(psfType),
-				PsfModelToInt(psfModel));
+				PsfModelToInt(psfModel));	
 		
 		// if successful
 		if (true)
@@ -218,67 +220,78 @@ public class PsfGenerator
 	
 	/**
 	 * 
-	 * Generates PSF.  Assuming parameters have allready been set
-	 * 
-	 * @param ri
-	 * @return
+	 * Generate the PSF
+	 * 	
+	 * @param size
+	 * @param spacing
+	 * @param emissionWavelength
+	 * @param numericalAperture
+	 * @param designImmersionOilRefractiveIndex
+	 * @param designSpecimenLayerRefractiveIndex
+	 * @param actualImmersionOilRefractiveIndex
+	 * @param actualSpecimenLayerRefractiveIndex
+	 * @param actualPointSourceDepthInSpecimenLayer
+	 * @param psfType
+	 * @param psfModel
+	 * @returnimport net.imglib2.img.basictypeaccess.array.ByteArray;
 	 */
-	public Img<FloatType> CallGeneratePsf(double ri)
+	public static void CallGeneratePsf(IterableInterval out,
+												int[] size,
+												float[] spacing,
+												double emissionWavelength,
+												double numericalAperture,
+												double designImmersionOilRefractiveIndex,
+												double designSpecimenLayerRefractiveIndex,
+												double actualImmersionOilRefractiveIndex,
+												double actualSpecimenLayerRefractiveIndex,
+												double actualPointSourceDepthInSpecimenLayer,
+												PsfType psfType ,
+												PsfModel psfModel)
 	{
+		// instantiate the psfGenerator
+		PsfGenerator psfGenerator = new PsfGenerator();
 		
 		// create a temporary buffer to place the psf in
-		int bufferSize = (int)(symsize[0]*symsize[1]*symsize[2]);
-
-		if (psfBuffer==null)
-		{
-			psfBuffer=new float[bufferSize];
-		}
-
-		System.out.println("generating psf...");
-
+		int bufferSize = (int)(size[0]*size[1]*size[2]);
+		
+		// TODO: it would be nice to just send the memory from an image
+		// to avoid this extra buffer and the copy.  But we have no guarentee
+		// what kind of memory would be coming in (could be planar) so 
+		// some checks would be needed
+		float[] psfBuffer=new float[bufferSize];
+		
 		long[] lsize={size[0],size[1],size[2]};
-		long[] lsymsize={symsize[0], symsize[1], symsize[2]};
 		
-		System.out.println("size: "+size[0]+" "+size[1]+" "+size[2]);
-		System.out.println("symsize: "+symsize[0]+" "+symsize[1]+" "+symsize[2]);
-		System.out.println("space: "+spacing[0]+" "+spacing[1]+" "+spacing[2]);
-		System.out.println("emissionWavelength: "+emissionWavelength);
-		System.out.println("numericalAperture: "+numericalAperture);
-		System.out.println("designImmersionOilRefractiveIndex: "+designImmersionOilRefractiveIndex);
-		System.out.println("designSpecimenLayerRefractiveIndex: "+designSpecimenLayerRefractiveIndex);
-		System.out.println("actualImmersionOilRefractiveIndex: "+actualImmersionOilRefractiveIndex);
-		System.out.println("ri: "+ri);
-		System.out.println("actualPointSourceDepthInSpecimenLayer: "+actualPointSourceDepthInSpecimenLayer);
-		
+		// call cosm psf using the swig wrapper
 		long status = CosmPsf_swig.CosmPsf(psfBuffer, 
-				symsize, 
+				new int[]{(int)lsize[0],(int)lsize[1],(int)lsize[2]}, 
 				spacing, 
 				emissionWavelength, 
 				numericalAperture,
 				designImmersionOilRefractiveIndex, 
 				designSpecimenLayerRefractiveIndex, 
 				actualImmersionOilRefractiveIndex, 
-				ri, 
+				actualSpecimenLayerRefractiveIndex, 
 				actualPointSourceDepthInSpecimenLayer,
 				PsfTypeToInt(psfType),
-				PsfModelToInt(psfModel));
-
-		// if successful
-		if (true)
-		{		
-			Img<FloatType> psf = convertBufferToImage(psfBuffer, symsize);
-			
-			psf = cropSymmetricPsf(psf);
-			
-	     	return psf;
-		}
-		else
+				PsfModelToInt(psfModel));	
+		
+		int i=0;
+		
+		// get a cursor so we can iterate through the image
+		final Cursor<FloatType> cursor = out.cursor();
+				
+		// iterate through the image and copy from the psf buffer
+		while (cursor.hasNext())
 		{
-			System.out.println("Native psf generation error.");
-			return null;
+			cursor.fwd();
+						
+			cursor.get().set(psfBuffer[i]);
+						
+			i++;
 		}
 	}	
-	
+
 	/**
 	 * 
 	 * Converts a float buffer to an Img
@@ -360,17 +373,5 @@ public class PsfGenerator
 		}
 	}
 	
-	Img<FloatType> cropSymmetricPsf(Img<FloatType> psfSym)
-	{
-		Img<FloatType> flipped=FlipPsfQuadrants.flip(psfSym, psfSym.factory(), symsize);
-		
-		 // crop the psf
-        Img<FloatType> cropped=StaticFunctions.crop(flipped, start, new long[]{size[0], size[1], size[2]});
-        
-		ImgPlus<FloatType> psfPlus=StaticFunctions.Wrap3DImg(cropped, "psf");
-		
-		flipped =FlipPsfQuadrants.flip(cropped, cropped.factory(), size);
-		
-		return flipped;
-	}
+
 }

@@ -19,7 +19,7 @@ import net.imglib2.Cursor;
  *
  * @param <T>
  */
-public class ExtendImage<T extends RealType<T>> extends InputOutputAlgorithm<T>
+public class ExtendImage<T extends RealType<T>> extends InputOutputAlgorithm<T, Img<T>>
 {
 	final int[] outputDim;
 	final ImgFactory<T> outputFactory;

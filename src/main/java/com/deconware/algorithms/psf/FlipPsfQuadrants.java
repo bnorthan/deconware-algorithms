@@ -4,6 +4,7 @@ import com.deconware.algorithms.InputOutputAlgorithm;
 
 import net.imglib2.RandomAccess;
 import net.imglib2.img.Img;
+import net.imglib2.IterableInterval;
 import net.imglib2.iterator.LocalizingZeroMinIntervalIterator;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.ImgFactory;
@@ -18,22 +19,32 @@ import net.imglib2.util.Util;
  *
  * @param <T>
  */
-public class FlipPsfQuadrants<T extends RealType<T>> extends InputOutputAlgorithm<T>
+public class FlipPsfQuadrants<T extends RealType<T>> extends InputOutputAlgorithm<T, RandomAccessibleInterval<T>>
 {
 	final int outputDim[];
-	final ImgFactory<T> imageFactory;
+	//final ImgFactory<T> imageFactory;
 	
 	public static <T extends RealType<T>> Img<T> flip(RandomAccessibleInterval<T> input, ImgFactory<T> outputFactory, int outputDim[])
 	{
-		final FlipPsfQuadrants<T> flipPsfQuadrants=new FlipPsfQuadrants<T>(input, outputFactory, outputDim);
+		T type = Util.getTypeFromInterval( input );
+		Img<T> output=outputFactory.create(outputDim, type);
+		
+		final FlipPsfQuadrants<T> flipPsfQuadrants=new FlipPsfQuadrants<T>(input, output, outputDim);
 		flipPsfQuadrants.process();
-		return flipPsfQuadrants.output;
+		
+		return output;
 	}
 	
-	public FlipPsfQuadrants(RandomAccessibleInterval<T> input, ImgFactory<T> outputFactory, int outputDim[])
+	public static <T extends RealType<T>> void flip(RandomAccessibleInterval<T> input, RandomAccessibleInterval<T> output, int outputDim[])
+	{
+		final FlipPsfQuadrants<T> flipPsfQuadrants=new FlipPsfQuadrants<T>(input, output, outputDim);
+		flipPsfQuadrants.process();
+	}
+	
+	public FlipPsfQuadrants(RandomAccessibleInterval<T> input, RandomAccessibleInterval<T> output, int outputDim[])
 	{
 		this.input=input;
-		this.imageFactory=outputFactory;
+		this.output=output;
 		this.outputDim=outputDim;
 	}
 	
@@ -49,9 +60,6 @@ public class FlipPsfQuadrants<T extends RealType<T>> extends InputOutputAlgorith
 		}
 		
 		final long startTime = System.currentTimeMillis();
-		
-		T kernelType = Util.getTypeFromInterval( input );
-		output = imageFactory.create(outputDim, kernelType.createVariable());
 		
 		final RandomAccess<T> inputCursor = input.randomAccess();
 		final RandomAccess<T> outputCursor = output.randomAccess();
