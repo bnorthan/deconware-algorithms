@@ -1,19 +1,12 @@
 package com.deconware.algorithms.psf;
 
-import com.deconware.algorithms.StaticFunctions;
-
 import net.imglib2.img.Img;
 import net.imglib2.IterableInterval;
 import net.imglib2.img.ImgFactory;
 import net.imglib2.img.planar.PlanarImgFactory;
 import net.imglib2.Cursor;
 
-import net.imglib2.img.basictypeaccess.array.FloatArray;
 import net.imglib2.type.numeric.real.FloatType;
-
-import net.imglib2.meta.ImgPlus;
-
-import com.deconware.algorithms.psf.FlipPsfQuadrants;
 
 import com.deconware.wrappers.CosmPsf_swig;
 

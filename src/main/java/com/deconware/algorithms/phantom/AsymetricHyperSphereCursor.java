@@ -49,7 +49,12 @@ import net.imglib2.RandomAccess;
 import net.imglib2.RandomAccessible;
 
 /**
+ * 
+ * 
+ * 
 * Iterate over all pixels in an n-dimensional sphere.
+* Re-implementation that allows for asymetric hyper spheres
+*
 *
 * @param <T>
 *
@@ -58,6 +63,7 @@ import net.imglib2.RandomAccessible;
 * @author Stephan Preibisch <preibisch@mpi-cbg.de>
 * @author Stephan Saalfeld <saalfeld@mpi-cbg.de>
 * @author Tobias Pietzsch <tobias.pietzsch@gmail.com>
+* @author Brian Northan <bnorthan@gmail.com>
 */
 public class AsymetricHyperSphereCursor< T > implements Cursor< T >
 {
