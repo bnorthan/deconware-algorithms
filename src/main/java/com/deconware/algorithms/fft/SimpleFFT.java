@@ -26,6 +26,6 @@ public interface SimpleFFT<T extends RealType<T>, S extends ComplexType<S>>
 	// returns inverse fft of "fft"
 	public Img<T> inverse(final Img<S> fft);
 	
-	// returns the size that the input needs to be padded to
-	public int[] GetPaddedInputSize(final Img<T> input);
+	// put fft if "fft" into out
+	public void inverse(final Img<S> fft, RandomAccessibleInterval<T> out);
 }

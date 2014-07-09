@@ -42,9 +42,7 @@ public class SimpleFFTFactory<T extends RealType<T>, S extends ComplexType<S>>
 		return new SimpleImgLib2FFT2<T,S>(image, imgImgFactory, fftImgFactory, complexType);
 		//return new SimpleImgLib2FFT<T,S>(image, imgImgFactory, fftImgFactory, complexType);
 		
-		// Todo:
-		// this function could be expanded to return different types of fft depending on operating system, hardware
-		// etc. 
+		// TODO:  Need to take FFTTarget as an input and return different types of fft
 	}
 	
 	/**

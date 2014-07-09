@@ -3,7 +3,6 @@ package com.deconware.algorithms.fft.filters;
 import com.deconware.algorithms.StaticFunctions;
 import com.deconware.algorithms.fft.SimpleFFT;
 import com.deconware.algorithms.fft.SimpleFFTFactory;
-import com.deconware.algorithms.fft.SimpleImgLib2FFT;
 import com.deconware.algorithms.phantom.Phantoms;
 
 import net.imglib2.RandomAccessibleInterval;
@@ -410,7 +409,7 @@ public abstract class AbstractIterativeFilter<T extends RealType<T>, S extends R
 	
 		// forward FFT
 		SimpleFFT<T, ComplexFloatType> fftTemp = 
-				new SimpleImgLib2FFT<T, ComplexFloatType>(normalization, imgFactory, fftImgFactory, new ComplexFloatType() );
+				SimpleFFTFactory.GetSimpleFFt(normalization, imgFactory, fftImgFactory, new ComplexFloatType() );
 		Img<ComplexFloatType> temp1FFT= fftTemp.forward(normalization);
 		
 		//StaticFunctions.SaveImg(normalization, "/home/bnorthan/Brian2014/Images/General/Deconvolution/Grand_Challenge/EvaluationData/Extended/testFeb10/normalcube_.tif");
@@ -498,7 +497,7 @@ public abstract class AbstractIterativeFilter<T extends RealType<T>, S extends R
 	
 		// forward FFT
 		SimpleFFT<T, ComplexFloatType> fftTemp = 
-				new SimpleImgLib2FFT<T, ComplexFloatType>(normalization, imgFactory, fftImgFactory, new ComplexFloatType() );
+				SimpleFFTFactory.GetSimpleFFt(normalization, imgFactory, fftImgFactory, new ComplexFloatType() );
 		Img<ComplexFloatType> temp1FFT= fftTemp.forward(normalization);
 		
 		// complex conjugate multiply fft of output of step 2 and fft of psf to get normalization factor

@@ -133,6 +133,14 @@ public class Convolution<T extends RealType<T>, S extends RealType<S>> extends L
 	{
 		super(image, kernel, imgFactory, kernelImgFactory);
 	}
+	
+	
+	public Convolution(final RandomAccessibleInterval<T> image, 
+			final RandomAccessibleInterval<S> kernel,
+			final RandomAccessibleInterval<T> output) throws IncompatibleTypeException
+	{
+		super(image, kernel, output);
+	}
 
 	/**
 	 * @param image

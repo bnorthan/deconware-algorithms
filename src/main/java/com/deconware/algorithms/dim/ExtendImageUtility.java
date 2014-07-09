@@ -19,7 +19,6 @@ public class ExtendImageUtility <T extends RealType<T>>
 		ZERO, CONSTANT, REFLECTION, MIRROR, MIRROR_EXP, NEUMANN
 	}
 	
-	int[] axisIndices;
 	int[] extension;
 	long[] oldDimensions;
 	long[] newDimensions;
@@ -33,40 +32,63 @@ public class ExtendImageUtility <T extends RealType<T>>
 	
 	OutOfBoundsFactory<T,RandomAccessibleInterval<T>> outOfBoundsFactory;
 	
+	public ExtendImageUtility(int[] extension, RandomAccessibleInterval<T> interval, BoundaryType boundaryType, FFTTarget fftTarget)
+	{
+		this(null, extension, interval, boundaryType, fftTarget);
+	}
+	
 	public ExtendImageUtility(int[] axisIndices, int[] extension, RandomAccessibleInterval<T> interval, BoundaryType boundaryType, FFTTarget fftTarget)
 	{
-		this.axisIndices=axisIndices;
 		this.extension=extension;
 		this.interval=interval;
 		
-		this.boundaryType=boundaryType;
-		this.fftTarget=fftTarget;
-		
 		oldDimensions=new long[interval.numDimensions()];
 		newDimensions=new long[interval.numDimensions()];
-		offset=new long[interval.numDimensions()];
 		
-		for (int d=0;d<interval.numDimensions();d++)
+		if (axisIndices!=null)
 		{
-			oldDimensions[d]=interval.dimension(d);
-			
-			boolean extendAxis=false;
-			for (int a=0;a<axisIndices.length;a++)
+			for (int d=0;d<interval.numDimensions();d++)
 			{
-				if (axisIndices[a]==d)
+				oldDimensions[d]=interval.dimension(d);
+				
+				boolean extendAxis=false;
+				for (int a=0;a<axisIndices.length;a++)
 				{
-					extendAxis=true;
-					newDimensions[d]=oldDimensions[d]+2*extension[a];
+					if (axisIndices[a]==d)
+					{
+						extendAxis=true;
+						newDimensions[d]=oldDimensions[d]+2*extension[a];
+					}
+				}
+				
+				// if this dimension is not extended the new dimension is the same as the old
+				if (extendAxis==false)
+				{
+					newDimensions[d]=interval.dimension(d);
 				}
 			}
-			
-			// if this dimension is not extended the new dimension is the same as the old
-			if (extendAxis==false)
+		}
+		else
+		{
+			for (int d=0;d<interval.numDimensions();d++)
 			{
-				newDimensions[d]=interval.dimension(d);
+				oldDimensions[d]=interval.dimension(d);
+				
+				if (d<extension.length)
+				{
+					newDimensions[d]=oldDimensions[d]+2*extension[d];
+				}
+				else
+				{
+					newDimensions[d]=oldDimensions[d];
+				}
 			}
 		}
-		
+	
+		offset=new long[interval.numDimensions()];
+		this.boundaryType=boundaryType;
+		this.fftTarget=fftTarget;
+	
 		// if the image should be extended further to the nearest FFT size that is optimized for speed
 		if (fftTarget!=null)
 		{

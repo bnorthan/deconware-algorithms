@@ -1,6 +1,5 @@
 package com.deconware.algorithms.fft.filters;
 
-import com.deconware.algorithms.StaticFunctions;
 import com.deconware.algorithms.fft.SimpleFFT;
 import com.deconware.algorithms.fft.SimpleFFTFactory;
 import com.deconware.algorithms.fft.filters.IterativeFilter.ConvolutionStrategy;
@@ -10,8 +9,10 @@ import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.exception.IncompatibleTypeException;
 import net.imglib2.img.Img;
 import net.imglib2.img.ImgFactory;
+import net.imglib2.img.array.ArrayImgFactory;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.complex.ComplexFloatType;
+import net.imglib2.util.Util;
 import net.imglib2.view.Views;
 
 /**
@@ -27,12 +28,12 @@ public abstract class AbstractFrequencyFilter<T extends RealType<T>, S extends R
 	final int numDimensions;
 	
 	protected RandomAccessibleInterval<T> image;
-	
 	protected RandomAccessibleInterval<S> kernel;
 	
 	boolean flipKernel=true;
 	
-	protected Img<T> output;
+	protected Img<T> outputImage;
+	protected RandomAccessibleInterval<T> outputInterval;
 	
 	Img<T> truth=null;
 	
@@ -62,22 +63,30 @@ public abstract class AbstractFrequencyFilter<T extends RealType<T>, S extends R
 	// size of measured image space
 	long[] k;
 	
+	/**
+	 * 
+	 * Constructor for case where the algorithm will create the output image
+	 * 
+	 * @param image - input 
+	 * @param kernel - kernel (psf)
+	 * @param imgFactory - factory used to create the output
+	 * @param kernelImgFactory - factory used to create shifted kernel
+	 * @param fftImgFactory - factory used to create fft
+	 */
 	public AbstractFrequencyFilter(final RandomAccessibleInterval<T> image, 
 			final RandomAccessibleInterval<S> kernel,
 			final ImgFactory<T> imgFactory,
 			final ImgFactory<S> kernelImgFactory,
 			final ImgFactory<ComplexFloatType> fftImgFactory)
 	{
-		this.numDimensions = image.numDimensions();
-		
 		this.image = image;
-		
 		this.kernel = kernel;
 		
 		this.fftImgFactory = fftImgFactory;
 		this.imgFactory = imgFactory;
 		this.kernelImgFactory = kernelImgFactory;
-		
+	
+		this.numDimensions = image.numDimensions();
 		this.kernelDim = new int[ numDimensions ];
 		
 		for (int d=0;d<numDimensions; ++d)
@@ -86,11 +95,14 @@ public abstract class AbstractFrequencyFilter<T extends RealType<T>, S extends R
 		}
 		
 		this.kernelFFT=null;
-		
 		this.imgFFT=null;
 		
 		setNumThreads();
 		
+		// create the output
+		T inputType=Util.getTypeFromInterval(image);
+		outputImage= imgFactory.create(image, inputType);
+		outputInterval= Views.interval(outputImage, outputImage);
 	}
 	
 	public AbstractFrequencyFilter( final Img<T> image, final Img<S> kernel, final ImgFactory<ComplexFloatType> fftImgFactory )
@@ -104,6 +116,46 @@ public abstract class AbstractFrequencyFilter<T extends RealType<T>, S extends R
 			final ImgFactory<S> kernelImgFactory) throws IncompatibleTypeException
 	{
 		this(image, kernel, imgFactory, kernelImgFactory, kernelImgFactory.imgFactory(new ComplexFloatType()));
+	}
+	
+	/**
+	 * 
+	 * Constructor used for case where output image is passed in as an interval (possibly 
+	 * just a hyperslice of a larger dataset).  
+	 * 
+	 * @param image - input interval
+	 * @param kernel - psf
+	 * @param output - output interval (algorithm will populate this with result)
+	 * @throws IncompatibleTypeException
+	 */
+	public AbstractFrequencyFilter(final RandomAccessibleInterval<T> image, 
+			final RandomAccessibleInterval<S> kernel,
+			final RandomAccessibleInterval<T> output
+			) throws IncompatibleTypeException
+	{
+		this.numDimensions = image.numDimensions();
+		this.image = image;
+		
+		this.kernel = kernel;
+		
+		// In this case we have no image factory -- use Array image factory
+		// TODO: more intelligent image factory creation
+		this.fftImgFactory = new ArrayImgFactory().imgFactory(new ComplexFloatType());
+		this.imgFactory = new ArrayImgFactory();
+		this.kernelImgFactory =  new ArrayImgFactory();
+		this.outputInterval=output;
+		
+		this.kernelDim = new int[ numDimensions ];
+		
+		for (int d=0;d<numDimensions; ++d)
+		{
+			kernelDim[d]=(int)kernel.dimension(d);
+		}
+		
+		this.kernelFFT=null;
+		this.imgFFT=null;
+		
+		setNumThreads();
 	}
 	
 	public AbstractFrequencyFilter( final Img<T> image, final Img<S> kernel ) throws IncompatibleTypeException
@@ -129,16 +181,6 @@ public abstract class AbstractFrequencyFilter<T extends RealType<T>, S extends R
 	 */
 	protected boolean performPsfFFT()
 	{
-		double sumbeforenorm=StaticFunctions.sum2(kernel);
-		System.out.println("sumbeforenorm: "+sumbeforenorm);
-		
-		// TODO: remove normalization step.  This should be done at a higher level
-		
-		//StaticFunctions.norm(Views.iterable(kernel));
-		double sum=StaticFunctions.sum2(kernel);
-		double sum2=StaticFunctions.sum2(image);
-		System.out.println("sum: "+sum+" sum2 "+sum2);
-		
 		final int kernelTemplateDim[] = new int[ numDimensions ];
 		
 		// set the kernel fft dimensions to be the same size as the image fft dimensions
@@ -147,7 +189,6 @@ public abstract class AbstractFrequencyFilter<T extends RealType<T>, S extends R
 
 		// calculate the size of the first dimension keeping in mind it will be a real to complex transform
 		kernelTemplateDim[ 0 ] = ( (int)imgFFT.dimension( 0 ) - 1 ) * 2;
-		
 		SimpleFFT<S, ComplexFloatType> psfFFT;
 			
 		if (flipKernel)
@@ -194,7 +235,7 @@ public abstract class AbstractFrequencyFilter<T extends RealType<T>, S extends R
 	@Override
 	public Img<T> getResult() 
 	{ 
-		return output; 
+		return outputImage; 
 	}
 
 	@Override

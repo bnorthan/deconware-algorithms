@@ -1,23 +1,28 @@
 package com.deconware.algorithms;
 
 import static org.junit.Assert.assertEquals;
+import junit.framework.Assert;
 
 import org.junit.Test;
 
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
+import net.imglib2.img.array.ArrayImg;
+import net.imglib2.img.basictypeaccess.array.FloatArray;
 import net.imglib2.img.ImgFactory;
 import net.imglib2.img.planar.PlanarImgFactory;
 import net.imglib2.type.numeric.real.FloatType;
 import net.imglib2.type.numeric.integer.UnsignedIntType;
+import net.imglib2.view.Views;
 
 import com.deconware.algorithms.phantom.Phantoms;
 import com.deconware.algorithms.psf.PsfGenerator;
 import com.deconware.algorithms.psf.PsfGenerator.PsfType;
 import com.deconware.algorithms.psf.PsfGenerator.PsfModel;
 import com.deconware.algorithms.fft.filters.Convolution;
+import com.deconware.algorithms.fft.filters.RichardsonLucyFilter;
 
 import net.imglib2.exception.IncompatibleTypeException;
-
 import net.imglib2.Point;
 
 public class DeconvolutionProcessTest 
@@ -47,7 +52,7 @@ public class DeconvolutionProcessTest
 		// create a planer image factory
 		ImgFactory<UnsignedIntType> imgFactory = new PlanarImgFactory<UnsignedIntType>();
 											
-		// use the image factory to create an images
+		// use the image factory to create images
 		Img<UnsignedIntType> image1 = imgFactory.create(size, new UnsignedIntType());
 		Img<UnsignedIntType> image2 = imgFactory.create(size, new UnsignedIntType());
 						
@@ -76,18 +81,52 @@ public class DeconvolutionProcessTest
 			return;
 		}
 		
-		boolean success=convolution.process();
+		convolution.process();
 		
 		Img<UnsignedIntType> out=convolution.getResult();
 		
 		double outSum=StaticFunctions.sum(out);
 		
 		System.out.println("out sum: "+outSum);
+		System.out.println("in1*in2 "+sum1*sum2);
+		
+		// output sum should be input1sum*input2sum
+		Assert.assertEquals(sum1*sum2, outSum, 0.0001);
+		
+		// try again using RandomAccessibleIntervals
+		RandomAccessibleInterval<UnsignedIntType>  interval1=Views.interval(image1, image1);
+		RandomAccessibleInterval<UnsignedIntType>  interval2=Views.interval(image2, image2);
+		
+		// use the image factory to create images
+		Img<UnsignedIntType> output = imgFactory.create(size, new UnsignedIntType());
+		RandomAccessibleInterval<UnsignedIntType>  intervalOut=Views.interval(output, output);		
+		
+		try
+		{
+			Convolution<UnsignedIntType, UnsignedIntType> convolution2=
+				new Convolution<UnsignedIntType, UnsignedIntType>(interval1, interval2, intervalOut);
+			
+			convolution2.process();
+		}
+		catch (IncompatibleTypeException ex)
+		{
+			return;
+		}
+	
+		// this time we shouldn't have to get the result becuase it should be written into the output
+		
+		// compute the sum
+		sum1=StaticFunctions.sum2(interval1);
+		sum2=StaticFunctions.sum2(interval2);
+		outSum=StaticFunctions.sum2(intervalOut);
+				
+		// output sum should be input1sum*input2sum
+		Assert.assertEquals(sum1*sum2, outSum, 0.0001);
 		
 		System.out.println("********************Convolution Unsigned Byte Test*******************");	
 	}
 	
-	@Test
+	//@Test
 	public void TestDeconvolutionProcess()
 	{
 		long xSize=128;

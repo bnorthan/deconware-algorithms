@@ -9,6 +9,8 @@ import net.imglib2.img.Img;
 import net.imglib2.img.ImgFactory;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.complex.ComplexFloatType;
+import net.imglib2.util.Util;
+import net.imglib2.view.Views;
 
 /**
  * 
@@ -34,6 +36,13 @@ public abstract class LinearFilter<T extends RealType<T>, S extends RealType<S>>
 			final ImgFactory<S> kernelImgFactory) throws IncompatibleTypeException
 	{
 		super(image, kernel, imgFactory, kernelImgFactory);
+	}
+	
+	public LinearFilter(final RandomAccessibleInterval<T> image, 
+			final RandomAccessibleInterval<S> kernel,
+			final RandomAccessibleInterval<T> output) throws IncompatibleTypeException
+	{
+		super(image, kernel, output);
 	}
 	
 	public LinearFilter( final Img<T> image, final Img<S> kernel, final ImgFactory<ComplexFloatType> fftImgFactory )
@@ -69,9 +78,9 @@ public abstract class LinearFilter<T extends RealType<T>, S extends RealType<S>>
 				
 		// perform the filtering operation in the frequency domain
 		frequencyOperation(imgFFT, kernelFFT);
-
+		
 		// perform the inverse fft to go back to spatial domain
-		output = fftInput.inverse(imgFFT);
+		fftInput.inverse(imgFFT, outputInterval);
 		
 		return true;
 	}

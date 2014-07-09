@@ -2,7 +2,7 @@ package com.deconware.algorithms.fft.filters;
 
 import com.deconware.algorithms.StaticFunctions;
 import com.deconware.algorithms.fft.SimpleFFT;
-import com.deconware.algorithms.fft.SimpleImgLib2FFT;
+import com.deconware.algorithms.fft.SimpleFFTFactory;
 
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.exception.IncompatibleTypeException;
@@ -85,7 +85,7 @@ public class RichardsonLucyFilter <T extends RealType<T>, S extends RealType<S>>
 	{
 		// create a new fft		
 		fftInput = 
-				new SimpleImgLib2FFT<T, ComplexFloatType>(image, imgFactory, fftImgFactory, new ComplexFloatType() );
+				SimpleFFTFactory.GetSimpleFFt(image, imgFactory, fftImgFactory, new ComplexFloatType() );
 					
 		return super.initialize();
 	}
@@ -145,7 +145,7 @@ public class RichardsonLucyFilter <T extends RealType<T>, S extends RealType<S>>
 		long startTime=System.currentTimeMillis();
 		
 		SimpleFFT<T, ComplexFloatType> fftTemp = 
-				new SimpleImgLib2FFT<T, ComplexFloatType>(reblurred, imgFactory, fftImgFactory, new ComplexFloatType() );
+				SimpleFFTFactory.GetSimpleFFt(reblurred, imgFactory, fftImgFactory, new ComplexFloatType() );
 		
 		long createFFTTime=System.currentTimeMillis()-startTime;
 		System.out.println("create fft time: "+createFFTTime);
@@ -163,7 +163,6 @@ public class RichardsonLucyFilter <T extends RealType<T>, S extends RealType<S>>
 		long conjugateMultiplyTime=System.currentTimeMillis()-startTime;
 		System.out.println("Conjugate multiply time: "+conjugateMultiplyTime);
 		
-			
 		return fftInput.inverse(reblurredFFT);
 	}
 	
