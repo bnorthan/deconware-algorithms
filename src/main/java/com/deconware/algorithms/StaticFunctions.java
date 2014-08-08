@@ -988,16 +988,21 @@ public class StaticFunctions
 		return factory.create(dims, template.firstElement());
 	}
 	
-	public static <T extends RealType<T>> Img<T> Create3dImage(Img<T> template, ImgFactory<T> factory)
+	public static <T extends RealType<T>> Img<T> CreateNdImage(Img<T> template, ImgFactory<T> factory)
 	{
-		final long[] dims = new long[3];
+		final long[] dims = new long[template.numDimensions()];
 		
-		for (int i=0;i<3;i++)
+		for (int i=0;i<template.numDimensions();i++)
 		{
 			dims[i]=template.dimension(i);
 		}
 		
 		return factory.create(dims, template.firstElement());
+	}
+	
+	public static <T extends RealType<T>> Img<T> CreateNdImage(Img<T> template)
+	{
+		return CreateNdImage(template, template.factory());
 	}
 	
 	public static <T extends RealType<T>> Img<T> Create3dImage(RandomAccessibleInterval<T> template, ImgFactory<T> factory, T t)

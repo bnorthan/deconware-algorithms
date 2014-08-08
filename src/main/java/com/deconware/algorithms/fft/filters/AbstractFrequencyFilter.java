@@ -1,5 +1,6 @@
 package com.deconware.algorithms.fft.filters;
 
+import com.deconware.algorithms.StaticFunctions;
 import com.deconware.algorithms.fft.SimpleFFT;
 import com.deconware.algorithms.fft.SimpleFFTFactory;
 import com.deconware.algorithms.fft.filters.IterativeFilter.ConvolutionStrategy;
@@ -184,13 +185,15 @@ public abstract class AbstractFrequencyFilter<T extends RealType<T>, S extends R
 		final int kernelTemplateDim[] = new int[ numDimensions ];
 		
 		// set the kernel fft dimensions to be the same size as the image fft dimensions
-		for ( int d = 0; d < numDimensions; ++d )
+		for ( int d = 0; d < numDimensions; ++d ) {
 			kernelTemplateDim[ d ] = (int)imgFFT.dimension( d );
-
+		}
+		
+		
 		// calculate the size of the first dimension keeping in mind it will be a real to complex transform
 		kernelTemplateDim[ 0 ] = ( (int)imgFFT.dimension( 0 ) - 1 ) * 2;
 		SimpleFFT<S, ComplexFloatType> psfFFT;
-			
+		
 		if (flipKernel)
 		{
 			// Flip PSF Quadrants to place the center at 0, 0, 0

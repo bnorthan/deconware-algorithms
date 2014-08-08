@@ -24,8 +24,6 @@ public class Phantoms
 	{
 		HyperSphere<T> hyperSphere = new HyperSphere<T>(randomAccessible, center, radius);
 		
-		HyperSphereCursor<T> cursor = hyperSphere.cursor();
-		
 		for (final T value:hyperSphere)
 		{
 			value.setReal(intensity);
