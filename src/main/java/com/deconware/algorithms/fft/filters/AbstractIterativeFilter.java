@@ -68,6 +68,22 @@ public abstract class AbstractIterativeFilter<T extends RealType<T>, S extends R
 	}
 	
 	/**
+	 * 
+	 * Constructor for the case where the output is passed in as a RandomAccessibleInterval
+	 * 
+	 * @param image
+	 * @param kernel
+	 * @param output
+	 * @throws IncompatibleTypeException
+	 */
+	public AbstractIterativeFilter(final RandomAccessibleInterval<T> image,
+			final RandomAccessibleInterval<S> kernel,
+			final RandomAccessibleInterval<T> output)
+			throws IncompatibleTypeException {
+		super(image, kernel, output);
+	}
+	
+	/**
 	 * @param image
 	 * @param kernel
 	 * @throws IncompatibleTypeException
@@ -212,7 +228,8 @@ public abstract class AbstractIterativeFilter<T extends RealType<T>, S extends R
 		    
 		if (result==true)
 		{
-			output = estimate;
+			//output = estimate;
+			StaticFunctions.copy3(estimate, outputInterval);
 		}
         
 		return result;
@@ -296,7 +313,8 @@ public abstract class AbstractIterativeFilter<T extends RealType<T>, S extends R
 			System.out.println("Iteration:"+iteration);
 		//	System.out.println();
 			
-			output=estimate;
+			//output=estimate;
+			StaticFunctions.copy3(estimate, outputInterval);
 			
 			iteration++;
 			
