@@ -95,6 +95,22 @@ public class TotalVariationRL <T extends RealType<T>, S extends RealType<S>> ext
 	}
 	
 	/**
+	 * 
+	 * Constructor for the case where the output is passed in as a RandomAccessibleInterval
+	 * 
+	 * @param image
+	 * @param kernel
+	 * @param output
+	 * @throws IncompatibleTypeException
+	 */
+	public TotalVariationRL(final RandomAccessibleInterval<T> image,
+			final RandomAccessibleInterval<S> kernel,
+			final RandomAccessibleInterval<T> output)
+			throws IncompatibleTypeException {
+		super(image, kernel, output);
+	}
+	
+	/**
 	 * Override ComputeEstimate as to implement total variation regularization
 	 */
 	@Override

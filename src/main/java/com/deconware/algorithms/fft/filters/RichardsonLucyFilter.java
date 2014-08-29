@@ -120,7 +120,7 @@ public class RichardsonLucyFilter <T extends RealType<T>, S extends RealType<S>>
 		
 		long divideTime=System.currentTimeMillis()-startTime;
 		
-		System.out.println("divide time: "+divideTime);
+		//System.out.println("divide time: "+divideTime);
 		
 		
 		// 3. correlate psf with the output of step 2.			
@@ -155,8 +155,8 @@ public class RichardsonLucyFilter <T extends RealType<T>, S extends RealType<S>>
 	 */
 	protected Img<T> correlationStep()
 	{
-		System.out.println("\n---------------------");
-		System.out.println("Correlation step: ");
+		//System.out.println("\n---------------------");
+		//System.out.println("Correlation step: ");
 		
 		long startTime=System.currentTimeMillis();
 		
@@ -164,12 +164,12 @@ public class RichardsonLucyFilter <T extends RealType<T>, S extends RealType<S>>
 				SimpleFFTFactory.GetSimpleFFt(reblurred, imgFactory, fftImgFactory, new ComplexFloatType() );
 		
 		long createFFTTime=System.currentTimeMillis()-startTime;
-		System.out.println("create fft time: "+createFFTTime);
+		//System.out.println("create fft time: "+createFFTTime);
 	
 		startTime=System.currentTimeMillis();
 		Img<ComplexFloatType> reblurredFFT= fftTemp.forward(reblurred);
 		long forwardFFTTime=System.currentTimeMillis()-startTime;
-		System.out.println("forward fft time: "+forwardFFTTime);
+		//System.out.println("forward fft time: "+forwardFFTTime);
 		
 		startTime=System.currentTimeMillis();
 		
@@ -177,7 +177,7 @@ public class RichardsonLucyFilter <T extends RealType<T>, S extends RealType<S>>
 		StaticFunctions.InPlaceComplexConjugateMultiply(reblurredFFT, kernelFFT);
 		
 		long conjugateMultiplyTime=System.currentTimeMillis()-startTime;
-		System.out.println("Conjugate multiply time: "+conjugateMultiplyTime);
+		//System.out.println("Conjugate multiply time: "+conjugateMultiplyTime);
 		
 		return fftInput.inverse(reblurredFFT);
 	}
