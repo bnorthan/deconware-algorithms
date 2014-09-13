@@ -4,10 +4,17 @@
   <modelVersion>4.0.0</modelVersion>
 
 	
-	<parent>
+<!--	<parent>
 		<groupId>org.scijava</groupId>
 		<artifactId>pom-scijava</artifactId>
-		<version>1.161</version>
+		<version>3.5</version>
+		<relativePath />
+	</parent> -->
+	
+	<parent>
+		<groupId>net.imagej</groupId>
+		<artifactId>pom-imagej</artifactId>
+		<version>2.50</version>
 		<relativePath />
 	</parent>
 

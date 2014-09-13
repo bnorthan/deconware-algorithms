@@ -499,7 +499,10 @@ public abstract class AbstractIterativeFilter<T extends RealType<T>, S extends R
 		maskStart.setPosition((fft_n[0]-n[0])/2+1, 0);
 		maskStart.setPosition((fft_n[1]-n[1])/2+1, 1); 
 		maskStart.setPosition((fft_n[2]-n[2])/2+1, 2); 
-		
+		//maskStart.setPosition((fft_n[0]-n[0])/2, 0);
+		//maskStart.setPosition((fft_n[1]-n[1])/2, 1); 
+		//maskStart.setPosition((fft_n[2]-n[2])/2, 2); 
+			
 		for (int i=0;i<3;i++)
 		{
 			System.out.println(n[i]+""+fft_n[i]);
@@ -511,7 +514,7 @@ public abstract class AbstractIterativeFilter<T extends RealType<T>, S extends R
 		Phantoms.drawCube(normalization, start, size, 1.0);
 		
 		// draw a cube the size of the object space
-	//	Phantoms.drawCube(mask, maskStart, maskSize, 1.0);
+//		Phantoms.drawCube(mask, maskStart, maskSize, 1.0);
 	
 		// forward FFT
 		SimpleFFT<T, ComplexFloatType> fftTemp = 
@@ -529,7 +532,7 @@ public abstract class AbstractIterativeFilter<T extends RealType<T>, S extends R
 		// rid of any values outside the object space.   
 	//	StaticFunctions.InPlaceMultiply(normalization, mask);
 		
-		//StaticFunctions.SaveImg(normalization, "/home/bnorthan/Brian2014/Images/General/Deconvolution/Grand_Challenge/EvaluationData/Extended/testFeb10/normalfirst_.tif");	
+		StaticFunctions.SaveImg(normalization, "/home/bnorthan/Brian2014/Images/General/Deconvolution/Grand_Challenge/EvaluationData/Extended/TestSep2/normalfirst_.tif");	
 	}
 	
 	/**

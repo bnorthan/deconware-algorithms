@@ -14,6 +14,20 @@ import com.deconware.algorithms.fft.SimpleFFTFactory.FFTTarget;
 
 public class ExtendImageUtility <T extends RealType<T>>
 {
+	/**
+	 * Enumeration for extension strategies
+	 * 
+	 * EXTENSION - extend by given number of pixels
+	 * DIMENSION - extend to given dimension
+	 * FFT - extend to nearest fast FFT size
+	 * @author bnorthan
+	 *
+	 */
+	static public enum ExtensionType
+	{
+		EXTENSION, DIMENSION, FFT
+	}
+	
 	static public enum BoundaryType
 	{
 		ZERO, CONSTANT, REFLECTION, MIRROR, MIRROR_EXP, NEUMANN
@@ -32,12 +46,12 @@ public class ExtendImageUtility <T extends RealType<T>>
 	
 	OutOfBoundsFactory<T,RandomAccessibleInterval<T>> outOfBoundsFactory;
 	
-	public ExtendImageUtility(int[] extension, RandomAccessibleInterval<T> interval, BoundaryType boundaryType, FFTTarget fftTarget)
+	public ExtendImageUtility(int[] extension, RandomAccessibleInterval<T> interval, ExtensionType extensionType, BoundaryType boundaryType, FFTTarget fftTarget)
 	{
-		this(null, extension, interval, boundaryType, fftTarget);
+		this(null, extension, interval, extensionType, boundaryType, fftTarget);
 	}
 	
-	public ExtendImageUtility(int[] axisIndices, int[] extension, RandomAccessibleInterval<T> interval, BoundaryType boundaryType, FFTTarget fftTarget)
+	public ExtendImageUtility(int[] axisIndices, int[] extension, RandomAccessibleInterval<T> interval, ExtensionType extensionType, BoundaryType boundaryType, FFTTarget fftTarget)
 	{
 		this.extension=extension;
 		this.interval=interval;
@@ -57,7 +71,15 @@ public class ExtendImageUtility <T extends RealType<T>>
 					if (axisIndices[a]==d)
 					{
 						extendAxis=true;
-						newDimensions[d]=oldDimensions[d]+2*extension[a];
+						
+						if (extensionType==ExtensionType.EXTENSION)
+						{
+							newDimensions[d]=oldDimensions[d]+2*extension[a];
+						}
+						else if (extensionType==ExtensionType.DIMENSION)
+						{
+							newDimensions[d]=extension[a];
+						}
 					}
 				}
 				
@@ -76,7 +98,14 @@ public class ExtendImageUtility <T extends RealType<T>>
 				
 				if (d<extension.length)
 				{
-					newDimensions[d]=oldDimensions[d]+2*extension[d];
+					if (extensionType==ExtensionType.EXTENSION)
+					{
+						newDimensions[d]=oldDimensions[d]+2*extension[d];
+					}
+					else if (extensionType==ExtensionType.DIMENSION)
+					{
+						newDimensions[d]=extension[d];
+					}
 				}
 				else
 				{

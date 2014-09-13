@@ -11,6 +11,7 @@ import net.imglib2.img.ImgFactory;
 import net.imglib2.img.array.ArrayImgs;
 import net.imglib2.meta.ImgPlus;
 import net.imglib2.type.numeric.RealType;
+import net.imglib2.type.NativeType;
 import net.imglib2.type.numeric.ComplexType;
 import net.imglib2.type.numeric.complex.ComplexFloatType;
 import net.imglib2.type.numeric.integer.ByteType;
@@ -26,6 +27,8 @@ import net.imglib2.algorithm.gradient.PartialDerivative;
 import net.imglib2.iterator.LocalizingZeroMinIntervalIterator;
 import io.scif.SCIFIO;
 import io.scif.img.ImgSaver;
+
+import net.imglib2.img.planar.PlanarImgFactory;
 
 import java.text.NumberFormat;
 import java.io.*;  
@@ -959,18 +962,23 @@ public class StaticFunctions
 	
 	public static <T extends RealType<T>> void SaveImg(Img<T> image, String name)
 	{
-		final SCIFIO scifio = new SCIFIO();
-		final ImgSaver saver = new ImgSaver(scifio.getContext());
-		
-		ImgPlus<T> imgPlus=Wrap3DImg(image, "temp");
-		
 		try
 		{
+			//final SCIFIO scifio = ;
+		//	final ImgSaver saver = new ImgSaver(scifio.getContext());
+		final ImgSaver saver = new ImgSaver();
+		
+		PlanarImgFactory planar=new PlanarImgFactory();
+		Img<T> planarImg=Create3dImage(image, planar, image.firstElement());
+		copy3(image, planarImg);
+		
+		ImgPlus<T> imgPlus=Wrap3DImg(planarImg, "temp");
+		
 			saver.saveImg(name, imgPlus);
 		}
 		catch (Exception ex)
 		{
-			
+			int stop=5;
 		}
 	}
 	
@@ -1013,7 +1021,6 @@ public class StaticFunctions
 		{
 			dims[i]=template.dimension(i);
 		}
-		https://github.com/bnorthan/RogueImageJPlugins/blob/master/SimpleSimpleITKDecon/src/main/java/com/truenorth/itk/commands/RichardsonLucyITKCommandSimple.java
 		return factory.create(dims, t);
 	}
 	/*

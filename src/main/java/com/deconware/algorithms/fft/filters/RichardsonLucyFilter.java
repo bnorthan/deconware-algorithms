@@ -140,7 +140,7 @@ public class RichardsonLucyFilter <T extends RealType<T>, S extends RealType<S>>
 		if ( (this.convolutionStrategy==ConvolutionStrategy.NON_CIRCULANT)
 				|| (this.convolutionStrategy==ConvolutionStrategy.SEMI_NONCIRCULANT) )
 		{
-			StaticFunctions.InPlaceDivide2(normalization, estimate);
+ 			StaticFunctions.InPlaceDivide2(normalization, estimate);
 		}
 		
 		// TODO: there is an extra create reblurred here!
