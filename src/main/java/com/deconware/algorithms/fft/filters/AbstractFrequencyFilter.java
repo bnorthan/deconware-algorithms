@@ -1,6 +1,5 @@
 package com.deconware.algorithms.fft.filters;
 
-import com.deconware.algorithms.StaticFunctions;
 import com.deconware.algorithms.fft.SimpleFFT;
 import com.deconware.algorithms.fft.SimpleFFTFactory;
 import com.deconware.algorithms.fft.filters.IterativeFilter.ConvolutionStrategy;
