@@ -45,7 +45,7 @@ public class Phantoms
 			dRadius[i]=(double)radius[i];
 		}
 		
-		EllipseRegionOfInterest eroi=new EllipseRegionOfInterest(3);
+		EllipseRegionOfInterest eroi=new EllipseRegionOfInterest(center.numDimensions());
 		
 		eroi.setOrigin(center);
 		eroi.setRadii(dRadius);
