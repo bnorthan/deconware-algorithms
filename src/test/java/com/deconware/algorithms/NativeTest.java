@@ -17,7 +17,9 @@ import net.imglib2.img.planar.PlanarImgFactory;
 import net.imglib2.type.numeric.integer.UnsignedIntType;
 import net.imglib2.type.numeric.real.FloatType;
 
-public class NativeTest 
+// TODO: reactivate this test
+
+/*public class NativeTest 
 {
 	@Test
 	public void testJavaWrappers()
@@ -77,15 +79,15 @@ public class NativeTest
 		
 		// if dependencies are not met it isn't an error... just means
 		// cuda is not available so can't run test. 
-		if (!dependenciesMet)
-		{
-			System.out.println();
-			System.out.println("Could not find YacuDecu native libraries.");
-			System.out.println("Skipping YacuDecu test...");
-			System.out.println();
+		//if (!dependenciesMet)
+		//{
+		//	System.out.println();
+		//	System.out.println("Could not find YacuDecu native libraries.");
+		//	System.out.println("Skipping YacuDecu test...");
+		//	System.out.println();
 			
-			return;
-		}*/
+		//	return;
+		//}
 		
 	}
-}
+}*/
