@@ -117,7 +117,11 @@ public abstract class ROIAlgorithm <T extends NumericType<T>, S extends NumericT
 	{		
 		if (outputImage == null)
 		{
-			outputImage = imageFactory.create(Util.intervalDimensions(inputImage), type.createVariable());
+			long[] imDim = new long[inputImage.numDimensions()];
+			for (int i=0;i<inputImage.numDimensions();i++) {
+				imDim[i]=inputImage.dimension(i);
+			}
+			outputImage = imageFactory.create(imDim, type.createVariable());
 		}
 		return outputImage;
 	}

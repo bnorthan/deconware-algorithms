@@ -87,7 +87,11 @@ public class StructuringElementCursor<T extends NumericType<T>> implements Curso
 	public static <R extends ComplexType<R>> long[][] imageToPath(
 	        final Img<R> im)
 	{
-	    return imageToPath(im, halveArray(Util.intervalDimensions(im)));
+			long[] imDim = new long[im.numDimensions()];
+			for (int i=0;i<im.numDimensions();i++) {
+				imDim[i]=im.dimension(i);
+			}
+	    return imageToPath(im, halveArray(imDim));
 	}
 	
 	public static <R extends ComplexType<R>> long[][] imageToPath(
@@ -100,8 +104,12 @@ public class StructuringElementCursor<T extends NumericType<T>> implements Curso
 	    
         if (strelImageCenter == null)
         {
-            long[] imDim = Util.intervalDimensions(im);
-            strelImageCenter = new long[imDim.length];
+        	  long[] imDim = new long[im.numDimensions()];
+        	  for (int i=0;i<im.numDimensions();i++) {
+        	  	imDim[i]=im.dimension(i);
+        	  }
+            
+        	  strelImageCenter = new long[imDim.length];
             for (int i = 0; i < imDim.length; ++i)
             {
                 strelImageCenter[i] = imDim[i] / 2;

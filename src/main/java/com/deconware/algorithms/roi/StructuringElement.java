@@ -2,15 +2,17 @@ package com.deconware.algorithms.roi;
 
 import net.imglib2.Cursor;
 import net.imglib2.img.array.ArrayImg;
-import net.imglib2.img.basictypeaccess.BitAccess;
-import net.imglib2.img.basictypeaccess.array.BitArray;
-import net.imglib2.type.logic.BitType;
+import net.imglib2.img.basictypeaccess.ByteAccess;
+import net.imglib2.img.basictypeaccess.array.ByteArray;
+import  net.imglib2.type.numeric.integer.ByteType;
+import net.imglib2.util.Fraction;
 
 /**
- * TODO
+ * TODO: Get rid of this or rework/retest!  It was written 2 years ago and is out of date
+ * with other projects. 
  *
  */
-public class StructuringElement extends ArrayImg<BitType,BitAccess> {
+public class StructuringElement extends ArrayImg<ByteType,ByteArray> {
 	
 	private final long[] offset;
 	private String name;
@@ -23,7 +25,7 @@ public class StructuringElement extends ArrayImg<BitType,BitAccess> {
 	
 	public StructuringElement(final long[] dimensions, final String name)
 	{
-		super(new BitArray(sizeOf(dimensions)), dimensions, 1);
+		super(new ByteArray(sizeOf(dimensions)), dimensions,new Fraction());
 		this.name = name;
 		offset = new long[dimensions.length];
 		
@@ -46,7 +48,7 @@ public class StructuringElement extends ArrayImg<BitType,BitAccess> {
 	public static StructuringElement createBall(final int nd, final double radius)
 	{
 		StructuringElement strel;
-		Cursor<BitType> cursor;
+		Cursor<ByteType> cursor;
 		final long[] dims = new long[nd];
 		final long[] pos = new long[nd];
 		double dist;
@@ -86,7 +88,7 @@ public class StructuringElement extends ArrayImg<BitType,BitAccess> {
 	public static StructuringElement createCube(final int nd, final int length)
 	{
 		StructuringElement strel;
-		Cursor<BitType> cursor;
+		Cursor<ByteType> cursor;
 		final long[] dims = new long[nd];
 		for (int i = 0; i < nd; ++i)
 		{
@@ -113,7 +115,7 @@ public class StructuringElement extends ArrayImg<BitType,BitAccess> {
 					" dimensions.");
 		}
 		final long[] dims = new long[nd];
-		Cursor<BitType> cursor;
+		Cursor<ByteType> cursor;
 		StructuringElement strel;
 		
 		for (int i = 0; i < nd; ++i)
